@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms-4.0.xsd
+">
+
+
+    <context:property-placeholder location="classpath:jms/activemq.properties"/>
+    <!--Spring 配置 connectionFactory-->
+    <bean id="jmsFactory"
+          class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+        <property name="userName" value="${activemq.username}"/>
+        <property name="password" value="${activemq.password}"/>
+    </bean>
+
+    <!--2. Spring JmsTemplate-->
+    <!-- Spring JMS Template
+        JmsTemplate 类的实例 一经配置便是线程安全 的。 要清楚一点，JmsTemplate
+        是有状态的，因为它维护了 ConnectionFactory 的引用，但这个状态时不是会话状态。
+-->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="jmsFactory"/>
+        <property name="defaultDestinationName" value="MySubject"/>
+        <!--JMS API有两种发送方法，一种采用发送模式、
+优先级和存活时间作为服务质量（QOS）参数，
+           默认{deliveryMode:2(1),priority:4,timeToLive:0}
+           另一种使用无需QOS参数的缺省值方法。-->
+        <property name="explicitQosEnabled" value="true"/>
+        <property name="deliveryMode" value="2"/>
+        <property name="priority" value="4"/>
+        <property name="timeToLive" value="1000"/>
+    </bean>
+
+    <!--3. 发送的接收消息-->
+    <bean id="destinationQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="HelloWorldQueue"/>
+    </bean>
+
+    <bean id="destinationTopic" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="HelloWorldTopic"/>
+    </bean>
+
+    <!-- 读取信息 -->
+    <bean id="consumer" class="me.anmt.ssm.jms.Consumer">
+        <property name="destination" ref="destinationTopic"/>
+    </bean>
+    <bean id="consumer1" class="me.anmt.ssm.jms.Consumer1">
+        <property name="destination" ref="destinationTopic"/>
+    </bean>
+
+    <!-- 发送信息 -->
+    <bean id="producer" class="me.anmt.ssm.jms.Producer">
+        <property name="destination" ref="destinationQueue"/>
+        <property name="jmsTemplate" ref="jmsTemplate"/>
+        <property name="topicdestination" ref="destinationTopic"/>
+    </bean>
+
+    <!-- 消息监听 -->
+    <bean id="listenerContainerTopic"
+          class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsFactory"/>
+        <property name="destination" ref="destinationTopic"/>
+        <!-- 发布订阅模式 -->
+        <property name="pubSubDomain" value="true"/>
+        <property name="messageListener" ref="consumer"/>
+        <!--持久化客户端ID -->
+        <property name="clientId" value="clientId_001"/>
+        <property name="subscriptionDurable" value="true"/>
+        <property name="durableSubscriptionName" value="My_001"/>
+    </bean>
+
+    <!--<bean class="org.springframework.jms.listener.endpoint.JmsMessageEndpointManager">-->
+        <!--<property name=""-->
+    <!--</bean>-->
+s
+
+    <!--配置多个消费者-->
+    <jms:listener-container destination-type="topic" container-type="default" connection-factory="jmsFactory" acknowledge="auto">
+        <jms:listener destination="HelloWorldTopic" ref="consumer1"/>
+        <jms:listener destination="HelloWorldTopic" ref="consumer"/>
+    </jms:listener-container>
+
+    <jms:jca-listener-container/>
+</beans>
