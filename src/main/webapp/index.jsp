@@ -7,6 +7,6 @@
 </head>
 
 <body>
-	<h1>welcome to use ssm framework! This is a demo.</h1>
+	<h1>welcome to use ssm framework! This is a demo   .</h1>
 </body>
 </html>
