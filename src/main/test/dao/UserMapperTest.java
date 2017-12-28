@@ -1,11 +1,12 @@
 package dao;
 
+import com.lemo.cmx.dao.UserDao;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 
 import base.BaseRunner;
-import me.anmt.ssm.dao.UserDao;
 
 /**
  * Created by 罗选通 on 2017/9/18.

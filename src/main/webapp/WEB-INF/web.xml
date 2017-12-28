@@ -20,13 +20,13 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
     <listener>
-        <listener-class>me.anmt.ssm.listener.InitServletContextListener</listener-class>
+        <listener-class>com.lemo.cmx.listener.InitServletContextListener</listener-class>
     </listener>
     <listener>
-        <listener-class>me.anmt.ssm.listener.LHttpSessionAttributeListener</listener-class>
+        <listener-class>com.lemo.cmx.listener.LHttpSessionAttributeListener</listener-class>
     </listener>
     <listener>
-        <listener-class>me.anmt.ssm.listener.LServletRequestListener</listener-class>
+        <listener-class>com.lemo.cmx.listener.LServletRequestListener</listener-class>
     </listener>
 
 

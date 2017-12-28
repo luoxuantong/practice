@@ -17,7 +17,7 @@
           p:pool-config-ref="poolConfig"/>
 
     <!-- 使用中间类解决RedisCache.jedisConnectionFactory的静态注入，从而使MyBatis实现第三方缓存 -->
-    <!--<bean id="redisCacheTransfer" class="me.anmt.ssm.redisp.RedisCacheTransfer">-->
+    <!--<bean id="redisCacheTransfer" class="RedisCacheTransfer">-->
         <!--<property name="jedisConnectionFactory" ref="jedisConnectionFactory"/>-->
     <!--</bean>-->
 
@@ -30,9 +30,9 @@
     <bean id="serialization"
           class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
 
-    <bean id="messageDelegateListener" class="me.anmt.ssm.redisp.MessageDelegateListener"/>
+    <bean id="messageDelegateListener" class="com.lemo.cmx.redisp.MessageDelegateListener"/>
 
-    <!--<bean id="redisMessageListener" class="me.anmt.ssm.aop.RedisMessageListener">-->
+    <!--<bean id="redisMessageListener" class="RedisMessageListener">-->
     <!--<property name="serializer" ref="serialization"/>-->
     <!--</bean>-->
 
@@ -55,7 +55,7 @@
         <property name="serializer" ref="serialization"/>
     </bean>
 
-    <bean id="redisProducer" class="me.anmt.ssm.redisp.RedisProducer">
+    <bean id="redisProducer" class="com.lemo.cmx.redisp.RedisProducer">
         <property name="redisTemplate" ref="redisTemplate"/>
     </bean>
 

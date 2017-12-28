@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="me.anmt.ssm.dao.UserDao">
+<mapper namespace="com.lemo.cmx.dao.UserDao">
     <insert id="insert">
         insert user(name) values(#{name})
     </insert>

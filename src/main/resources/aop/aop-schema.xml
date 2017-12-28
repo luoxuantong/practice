@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context-3.0.xsd
-       http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
-       http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!--声明业务类-->
-    <bean id="baseBusiness" class="me.anmt.ssm.aop.BaseBusinessImpl"/>
+    <bean id="baseBusiness" class="com.lemo.cmx.aop.BaseBusinessImpl"/>
     <!--声明通知类-->
-    <bean id="baseBefore" class="me.anmt.ssm.aop.BusinessBeforeAdvice"/>
-    <bean id="baseAfter" class="me.anmt.ssm.aop.BusinessAfterReturningAdvice"/>
-    <bean id="baseAround" class="me.anmt.ssm.aop.BusinessAroundAdvice"/>
-    <bean id="baseAfterThrows" class="me.anmt.ssm.aop.BusinessThrowsAdvice"/>
+    <bean id="baseBefore" class="com.lemo.cmx.aop.BusinessBeforeAdvice"/>
+    <bean id="baseAfter" class="com.lemo.cmx.aop.BusinessAfterReturningAdvice"/>
+    <bean id="baseAround" class="com.lemo.cmx.aop.BusinessAroundAdvice"/>
+    <bean id="baseAfterThrows" class="com.lemo.cmx.aop.BusinessThrowsAdvice"/>
     <!--指定切点匹配类-->
-    <bean id="pointMatcher" class="me.anmt.ssm.aop.PointMatcher"/>
+    <bean id="pointMatcher" class="com.lemo.cmx.aop.PointMatcher"/>
 
     <!--包装通知,指定切点-->
     <bean id="matchBeforeAdvisor"
@@ -39,12 +29,12 @@
     <bean id="businessProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
         <!--代理类实现的接口-->
         <property name="proxyInterfaces">
-            <value>me.anmt.ssm.aop.IBaseBusiness</value>
+            <value>com.lemo.cmx.aop.IBaseBusiness</value>
         </property>
 
         <!--设置目标对象-->
         <property name="target">
-            <bean class="me.anmt.ssm.aop.BaseBusinessImpl"/>
+            <bean class="com.lemo.cmx.aop.BaseBusinessImpl"/>
         </property>
 
         <!--代理对象使用的拦截器-->

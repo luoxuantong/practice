@@ -36,7 +36,7 @@
     <!-- 配置扫描包，使用 @Controller注解生效 -->
     <!--<context:component-scan base-package="me.anmt.ssm.controller" />-->
     <!-- 自动扫描且只扫描@Controller -->
-    <context:component-scan base-package="me.anmt.ssm"
+    <context:component-scan base-package="com.lemo.cmx"
                             use-default-filters="false">
         <context:include-filter type="annotation"
                                 expression="org.springframework.stereotype.Controller"/>
