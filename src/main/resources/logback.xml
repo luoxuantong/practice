@@ -7,6 +7,19 @@
         </encoder>
     </appender>
 
+    <appender name="PROJECT-TASK" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+            <dataSource class="com.mchange.v2.c3p0.ComboPooledDataSource">
+                <driverClass>com.mysql.jdbc.Driver</driverClass>
+                <url>jdbc:mysql://${ip}:${port}/${dbname}</url>
+                <user>${username}</user>
+                <password>${password}</password>
+                <sqlDialect class="ch.qos.logback.core.db.dialect.MySQLDialect" />
+            </dataSource>
+        </connectionSource>
+    </appender>
+
+
     <appender name="rollingFile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>/tmp/logs/web.log</file>
@@ -38,5 +51,6 @@
     <root level="INFO">
         <appender-ref ref="console"/>
         <!--<appender-ref ref="rollingFile" />-->
+        <!--<appender-ref ref="PROJECT-TASK"/>-->
     </root>
 </configuration>

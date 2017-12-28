@@ -3,110 +3,109 @@ package me.anmt.ssm.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 public class User implements Serializable {
 
-    private Long id;
 
-    // 用户名
-    private String userName;
+  private Long id;
 
-    // 密码
-    private String password;
+  // 用户名
 
-    // 姓名
-    private String name;
 
-    // 年龄
-    private Integer age;
+  // 密码
 
-    // 性别，1男性，2女性
-    private Integer sex;
 
-    // 出生日期
-    private Date birthday;
+  private String password;
 
-    // 创建时间
-    private Date created;
+  // 姓名
+  private String name;
 
-    // 更新时间
-      private Date updated;
+  // 年龄
+  @NotNull
+  private Integer age;
 
-    public Long getId() {
-        return id;
-    }
+  // 性别，1男性，2女性
+  private Integer sex;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  // 出生日期
+  private Date birthday;
 
-    public String getuserName() {
-        return userName;
-    }
+  // 创建时间
+  private Date created;
 
-    public void setuserName(String userName) {
-        this.userName = userName;
-    }
+  // 更新时间
+  private Date updated;
 
-    public String getPassword() {
-        return password;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public Integer getAge() {
-        return age;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setAge(Integer age) {
-        this.age = age;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Integer getSex() {
-        return sex;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
+  public Integer getAge() {
+    return age;
+  }
 
-    public Date getBirthday() {
-        return birthday;
-    }
+  public void setAge(Integer age) {
+    this.age = age;
+  }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
+  public Integer getSex() {
+    return sex;
+  }
 
-    public Date getCreated() {
-        return created;
-    }
+  public void setSex(Integer sex) {
+    this.sex = sex;
+  }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
+  public Date getBirthday() {
+    return birthday;
+  }
 
-    public Date getUpdated() {
-        return updated;
-    }
+  public void setBirthday(Date birthday) {
+    this.birthday = birthday;
+  }
 
-    public void setUpdated(Date updated) {
-        this.updated = updated;
-    }
+  public Date getCreated() {
+    return created;
+  }
 
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", name=" + name
-                + ", age=" + age + ", sex=" + sex + ", birthday=" + birthday + ", created=" + created
-                + ", updated=" + updated + "]";
-    }
+  public void setCreated(Date created) {
+    this.created = created;
+  }
+
+  public Date getUpdated() {
+    return updated;
+  }
+
+  public void setUpdated(Date updated) {
+    this.updated = updated;
+  }
+
+  @Override
+  public String toString() {
+    return "User [id=" + id + ", userName=" + password + ", password=" + password + ", name=" + name
+            + ", age=" + age + ", sex=" + sex + ", birthday=" + birthday + ", created=" + created
+            + ", updated=" + updated + "]";
+  }
 }

@@ -17,7 +17,7 @@ public class RedisPool {
    */
   static {
     //得到redis.properties 中的配置信息
-    ResourceBundle bundle = ResourceBundle.getBundle("redis/redisp");
+    ResourceBundle bundle = ResourceBundle.getBundle("redis/redis");
     if(bundle==null){
       throw new IllegalArgumentException("[redisp.properties] is not found");
     }
@@ -29,7 +29,7 @@ public class RedisPool {
     config.setTestOnBorrow(Boolean.valueOf(bundle.getString("redis.testOnBorrow")));
 //    config.setTestOnReturn(Boolean.valueOf(bundle.getString("redisp.testOnReturn")));
     //创建redis连接池
-    pool =  new JedisPool( config,bundle.getString("redis.host"),Integer.valueOf(bundle.getString("redis.port")));
+    pool =  new JedisPool( config,bundle.getString("redis.host"),Integer.valueOf(bundle.getString("redis.port")),1000,bundle.getString("redis.pass"));
   }
   /**
    * 获取jedis实例

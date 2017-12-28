@@ -1,55 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-	
-	<!-- 配置注解驱动，会默认加载: RequestMappingHandlerAdapter RequestMappingHandlerMapping -->
-	<mvc:annotation-driven/>
 
 
-	<!-- 解决静态资源被拦截的问题 -->
-	<mvc:default-servlet-handler/>
+    <!--<bean id="csmDataCountService" name="/CsmDataCountSer.shtm"-->
+          <!--class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">-->
+        <!--<property name="service" ref="csmDataCountSerImpl"></property>-->
+        <!--<property name="serviceInterface" value="com.hlzt.csm.service.CsmDataCountSer">-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!-- 远程服务的URL ，key值表示客户端请求的地址-->
+    <!--<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">-->
+        <!--<property name="mappings">-->
+            <!--<props>-->
+                <!--<prop key="/CsmDataCountSer.shtm">csmDataCountService</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!-- 配置注解驱动，会默认加载: RequestMappingHandlerAdapter RequestMappingHandlerMapping -->
+    <mvc:annotation-driven/>
+
+
+    <!-- 解决静态资源被拦截的问题 -->
+    <mvc:default-servlet-handler/>
 
     <aop:aspectj-autoproxy/>
 
-	<!-- 配置扫描包，使用 @Controller注解生效 -->
-	<!--<context:component-scan base-package="me.anmt.ssm.controller" />-->
+    <!-- 配置扫描包，使用 @Controller注解生效 -->
+    <!--<context:component-scan base-package="me.anmt.ssm.controller" />-->
     <!-- 自动扫描且只扫描@Controller -->
     <context:component-scan base-package="me.anmt.ssm"
                             use-default-filters="false">
         <context:include-filter type="annotation"
-                                expression="org.springframework.stereotype.Controller" />
+                                expression="org.springframework.stereotype.Controller"/>
         <context:include-filter type="annotation"
-                                expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
         <context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/>
     </context:component-scan>
 
-	<!-- 定义Excel视图对象，并且指定视图名称 -->
-	<!-- <bean name="excelView" class="me.anmt.ssm.view.UserExcelView"></bean> -->
+    <!-- 定义Excel视图对象，并且指定视图名称 -->
+    <!-- <bean name="excelView" class="me.anmt.ssm.view.UserExcelView"></bean> -->
 
     <bean id="resourceUrlProvider"
           class="org.springframework.web.servlet.resource.ResourceUrlProvider">
     </bean>
 
-    <mvc:annotation-driven>
+    <mvc:annotation-driven validator="validator">
         <mvc:message-converters register-defaults="true">
             <!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                <constructor-arg value="UTF-8" />
+                <constructor-arg value="UTF-8"/>
             </bean>
             <!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
             <bean
                     class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="prettyPrint" value="true" />
+                <property name="prettyPrint" value="true"/>
             </bean>
         </mvc:message-converters>
+        <mvc:argument-resolvers>
+            <bean class="org.springframework.mobile.device.DeviceHandlerMethodArgumentResolver"></bean>
+        </mvc:argument-resolvers>
     </mvc:annotation-driven>
+
+    <!-- 指定自己定义的validator -->
+    <!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册-->
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找  -->
+                <value>classpath:messages</value>
+                <value>classpath:org/hibernate/validator/ValidationMessages</value>
+            </list>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="false"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="60"/>
+    </bean>
+
     <!--Freemarker的支持配置-->
     <bean id="configurer"
           class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
@@ -81,14 +124,14 @@
             </props>
         </property>
         <!--<property name="freemarkerVariables">-->
-            <!--<map>-->
-                <!--<entry key="shiro">-->
-                    <!--<bean class="com.jagregory.shiro.freemarker.ShiroTags"></bean>-->
-                <!--</entry>-->
-            <!--</map>-->
+        <!--<map>-->
+        <!--<entry key="shiro">-->
+        <!--<bean class="com.jagregory.shiro.freemarker.ShiroTags"></bean>-->
+        <!--</entry>-->
+        <!--</map>-->
         <!--</property>-->
     </bean>
-	<!-- 配置视图解析器 -->
+    <!-- 配置视图解析器 -->
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
         <property name="order" value="2"/>
@@ -98,42 +141,42 @@
         <property name="requestContextAttribute" value="base"/>
     </bean>
     <!--<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">-->
-        <!--<property name="order" value="1"/>-->
+    <!--<property name="order" value="1"/>-->
     <!--</bean>-->
-	<!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-		<!--&lt;!&ndash; 前缀 &ndash;&gt;-->
-		<!--<property name="prefix" value="/WEB-INF/views/"></property>-->
-		<!--&lt;!&ndash; 后缀 &ndash;&gt;-->
-		<!--<property name="suffix" value=".ftl"></property>-->
-	<!--</bean>-->
-	<!-- 配置第二个视图解析器 -->
-	<!-- <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
-		<property name="order" value="1"></property>
-	</bean> -->
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+    <!--&lt;!&ndash; 前缀 &ndash;&gt;-->
+    <!--<property name="prefix" value="/WEB-INF/views/"></property>-->
+    <!--&lt;!&ndash; 后缀 &ndash;&gt;-->
+    <!--<property name="suffix" value=".ftl"></property>-->
+    <!--</bean>-->
+    <!-- 配置第二个视图解析器 -->
+    <!-- <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="1"></property>
+    </bean> -->
 
-	<!-- 定义文件上传解析器 -->
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<!-- 设定默认编码 -->
-		<property name="defaultEncoding" value="UTF-8"></property>
-		<!-- 设定文件上传的最大值5MB，5*1024*1024 -->
-		<property name="maxUploadSize" value="5242880"></property>
-	</bean>
-	
-	<!-- 配置自定义拦截器 -->
-	<!-- <mvc:interceptors>
-		<mvc:interceptor>
-			path： 拦截所有请求
-			<mvc:mapping path="/**" />
-			class：指定拦截器
-			<bean class="me.anmt.ssm.interceptor.MyInterceptorHandler"/>
-		</mvc:interceptor>
-		<mvc:interceptor>
-			path： 拦截所有请求
-			<mvc:mapping path="/**" />
-			class：指定拦截器
-			<bean class="me.anmt.ssm.interceptor.MyInterceptorHandler1"/>
-		</mvc:interceptor>
-	</mvc:interceptors> -->
+    <!-- 定义文件上传解析器 -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设定默认编码 -->
+        <property name="defaultEncoding" value="UTF-8"></property>
+        <!-- 设定文件上传的最大值5MB，5*1024*1024 -->
+        <property name="maxUploadSize" value="5242880"></property>
+    </bean>
+
+    <!-- 配置自定义拦截器 -->
+    <!-- <mvc:interceptors>
+        <mvc:interceptor>
+            path： 拦截所有请求
+            <mvc:mapping path="/**" />
+            class：指定拦截器
+            <bean class="me.anmt.ssm.interceptor.MyInterceptorHandler"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            path： 拦截所有请求
+            <mvc:mapping path="/**" />
+            class：指定拦截器
+            <bean class="me.anmt.ssm.interceptor.MyInterceptorHandler1"/>
+        </mvc:interceptor>
+    </mvc:interceptors> -->
 
 </beans>
